@@ -1,7 +1,5 @@
 package brickBracker;
 
-import org.w3c.dom.css.Rect;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,19 +15,21 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private int totalBricks = 21;
 
     private Timer timer;
-    private int delay = 2;
+    //Speed ball
+    private int delay = 1;
+
 
     //Starting position
     private int playerX = 310;
 
     //Position for ball
-    private int ballPosX = 120;
+    private int ballPosX = 380;
     private int ballPosY = 350;
     
     Random random = new Random();
     int n = random.nextInt(2+1-2) - 2;
     private int ballXdir = n;
-    private int ballYdir = -2;
+    private int ballYdir = -4;
 
     private MapGenerator map;
 
@@ -39,8 +39,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        timer = new Timer(1, this);
+        timer = new Timer(delay, this);
+
+
+        timer.setDelay(1);
         timer.start();
+        timer.setDelay(1);
+
     }
 
     public void paint(Graphics g){
@@ -70,17 +75,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.yellow);
         g.fillOval(ballPosX, ballPosY,20,20);
 
-        if(totalBricks <=0){
 
+        //Win
+        if(totalBricks <=0){
             play = false;
             ballXdir = 0;
-            ballYdir =0;
+            ballYdir = 0;
             g.setColor(Color.RED);
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("GAME OVER, Scores: " + score,260,300);
+            g.drawString("¡HAS GANADO!",230,200);
 
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("HAS GANADO",230,350);
+            g.drawString("Scores: " + score,280,250);
+
+            g.drawString("Press Enter to Restart ",200,350);
         }
 
         //Game Over
@@ -111,6 +119,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 ballYdir = -ballYdir;
             }
 
+
             //detect bricks
             A: for (int i = 0; i < map.map.length ; i++) {
                 for (int j = 0; j < map.map[0].length ; j++) {
@@ -139,6 +148,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
                             break A;
                         }
+
 
                     }
                 }
@@ -185,10 +195,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
             if(!play){
                 play = true;
-                ballPosX = 120;
+                ballPosX = 180;
                 ballPosY = 350;
                 ballXdir = n;
-                ballYdir = -2;
+                ballYdir = -4;
                 playerX = 310;
                 score = 0;
                 totalBricks = 21;
